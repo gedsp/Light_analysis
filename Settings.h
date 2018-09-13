@@ -1,6 +1,10 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "ana_michael/MyStyle.C"
+#include "ana_michael/PlotUtils.h"
+#include "ana_michael/PlotUtils.C"
+
 static const int N_PMT = 5;
 static const int N_LEM = 12;
 

@@ -1,5 +1,5 @@
-#include "Utils.h"
-#include "../../LIB/mylib.h"
+#include "../Settings.h"
+#include "../LIB/mylib.h"
 
 TString run_desc2 = "Runs 768-1199";
 
@@ -27,7 +27,9 @@ void fitHist(TTree* t, int ind, TString name, TString unit, int nbins, float xmi
 
 void fitVoltages()
 {
-	TFile *f = TFile::Open(dbfile.c_str());
+	gSystem->Exec("mkdir -p voltages");
+	
+	TFile *f = TFile::Open(db_file.c_str());
 	TTree *ntup = (TTree*)f->Get("ntuple");
 	
 	gStyle->SetOptStat(0);
@@ -51,7 +53,6 @@ void fitVoltages()
 		c1->Modified();
 		c1->Update();
 		c1->Print(Form("voltages/%s_fit.pdf",(names[i]).Data()));
-		//lets_pause();
 	}
 	
 	// 3sigma cut
@@ -68,8 +69,10 @@ void fitVoltages()
 	names[4].Data(),names[4].Data(),cut_val_err,names[5].Data(),names[5].Data(),cut_val_err,
 	names[6].Data(),names[6].Data(),cut_val_err);
 	
-	// remove nsamples=1000 and missing runs
-	cuts=cuts+" && run!=789 && run!=790 && run!=791 && run!=800 && run!=801 && run!=802 && (run*1000+subrun!=999020) && (run*1000+subrun!=1007003) && (run*1000+subrun!=998053) && (run*1000+subrun!=998055) && (run*1000+subrun!=840077) && (run*1000+subrun!=842010) && (run*1000+subrun!=981000) && (run*1000+subrun!=982000) && (run*1000+subrun!=983000) && (run*1000+subrun!=984000) && (run*1000+subrun!=984001) && (run*1000+subrun!=986000) && (run*1000+subrun!=989009) && (run*1000+subrun!=989010) && (run*1000+subrun!=989011) && (run*1000+subrun!=990000) && (run*1000+subrun!=994009) && (run*1000+subrun!=995000) && (run*1000+subrun!=995003) && (run*1000+subrun!=995004) && (run*1000+subrun!=995005) && (run*1000+subrun!=995006) && (run*1000+subrun!=995007) && (run*1000+subrun!=995008) && (run*1000+subrun!=996000) && (run*1000+subrun!=996001) && (run*1000+subrun!=996002) && (run*1000+subrun!=996003) && (run*1000+subrun!=996004) && (run*1000+subrun!=996005) && (run*1000+subrun!=996006) && (run*1000+subrun!=1038020) && (run*1000+subrun!=1038021) && (run*1000+subrun!=1039000) && (run*1000+subrun!=1040000) && (run*1000+subrun!=1040001) && (run*1000+subrun!=1040002)";
+	// remove nsamples=1000
+	cuts=cuts+" && run!=789 && run!=790 && run!=791 && run!=800 && run!=801 && run!=802 ";
+	// remove missing runs
+	cuts=cuts+" && (run*1000+subrun!=999020) && (run*1000+subrun!=1007003) && (run*1000+subrun!=998053) && (run*1000+subrun!=998055) && (run*1000+subrun!=840077) && (run*1000+subrun!=842010) && (run*1000+subrun!=981000) && (run*1000+subrun!=982000) && (run*1000+subrun!=983000) && (run*1000+subrun!=984000) && (run*1000+subrun!=984001) && (run*1000+subrun!=986000) && (run*1000+subrun!=989009) && (run*1000+subrun!=989010) && (run*1000+subrun!=989011) && (run*1000+subrun!=990000) && (run*1000+subrun!=994009) && (run*1000+subrun!=995000) && (run*1000+subrun!=995003) && (run*1000+subrun!=995004) && (run*1000+subrun!=995005) && (run*1000+subrun!=995006) && (run*1000+subrun!=995007) && (run*1000+subrun!=995008) && (run*1000+subrun!=996000) && (run*1000+subrun!=996001) && (run*1000+subrun!=996002) && (run*1000+subrun!=996003) && (run*1000+subrun!=996004) && (run*1000+subrun!=996005) && (run*1000+subrun!=996006) && (run*1000+subrun!=1038020) && (run*1000+subrun!=1038021) && (run*1000+subrun!=1039000) && (run*1000+subrun!=1040000) && (run*1000+subrun!=1040001) && (run*1000+subrun!=1040002)";
 	
 	TH1F* hh[nhist];
 	for (int i=0; i<nhist; i++)
@@ -169,7 +172,7 @@ void fitVoltages()
 	int n_runs_selected=0;
 	for (int i=0; i<500000; i++)
 	{
-		if (runh->GetBinContent(i)==1) { cout << "files/run" << (int)(runh->GetBinCenter(i)/1000) << "-" << ((int)runh->GetBinCenter(i))%1000 << ".root "; n_runs_selected++; }
+		if (runh->GetBinContent(i)==1) { cout << dpd_dir <<"/dpd-" << (int)(runh->GetBinCenter(i)/1000) << "-" << ((int)runh->GetBinCenter(i))%1000 << ".root "; n_runs_selected++; }
 		if (runh->GetBinContent(i)>1) cout << endl << "WARNING: more than 1 entry in bin " << i << ": " << runh->GetBinCenter(i) << endl;
 	}
 	cout << endl;
