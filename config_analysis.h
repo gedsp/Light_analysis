@@ -13,12 +13,15 @@ const string ana_dir = "/Volumes/data/Dropbox/physics/311/git/Light_analysis"; /
 //const string ana_dir = "/afs/cern.ch/user/l/leyton/Light_analysis"; // on lxplus 
 
 // full path to DPD storage
-const string dpd_dir = "/Volumes/data/Dropbox/physics/311/git/Light_reco/dpdMaker/dpd";
+const string dpd_dir = "/Volumes/data/Dropbox/physics/311/git/Light_reco/dpdMaker/dpd"; // local
+//const string dpd_dir = "/afs/cern.ch/user/l/leyton/public/dpd_20180914";
 
 // full path to db file
 const string db_file = "/Volumes/data/Dropbox/physics/311/git/Light_reco/dbVoltages.root";
 // full path to analysis input dpd file
-const string dpd_file = ana_dir+"/goodRuns_v2_1117.root";
+const string dpd_file = dpd_dir+"/dpd_goodRunList_v2_1117_20180914.root"; // local
+//const string dpd_file = "/afs/cern.ch/user/l/leyton/public/dpd_goodRunList_v2_1117_20180914.root"; // on lxplus
+
 
 TString run_desc = "goodRunList v2";
 
