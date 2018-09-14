@@ -1,27 +1,22 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef CONFIG_ANALYSIS_H
+#define CONFIG_ANALYSIS_H
 
 #include "ana_michael/MyStyle.C"
 #include "ana_michael/PlotUtils.h"
 #include "ana_michael/PlotUtils.C"
 
-static const int N_PMT = 5;
+static const int N_PMT = 5; // also in config_reco.h 
 static const int N_LEM = 12;
-
-//set up the input folder where the light-charge matched data is stored.
-const string matched_data_dir = "/Volumes/data/root_files/2018Feb05/"; // local 
-//const string matched_data_dir = "/eos/user/j/jsotooto/root_files/2018Feb05/"; // on lxplus
 
 // full path to Light_analysis directory                        
 const string ana_dir = "/Volumes/data/Dropbox/physics/311/git/Light_analysis"; // local
 //const string ana_dir = "/afs/cern.ch/user/l/leyton/Light_analysis"; // on lxplus 
 
-
-// full path to input/output folder where dpds are stored
-const string dpd_dir = ana_dir+"/dpdMaker/dpd"; 
+// full path to DPD storage
+const string dpd_dir = "/Volumes/data/Dropbox/physics/311/git/Light_reco/dpdMaker/dpd";
 
 // full path to db file
-const string db_file = ana_dir+"/runList/dbVoltages.root";
+const string db_file = "/Volumes/data/Dropbox/physics/311/git/Light_reco/dbVoltages.root";
 // full path to analysis input dpd file
 const string dpd_file = ana_dir+"/goodRuns_v2_1117.root";
 

@@ -1,5 +1,4 @@
-#include "../Settings.h"
-#include "../LIB/mylib.h"
+#include "../config_analysis.h"
 
 TString run_desc2 = "Runs 768-1199";
 
