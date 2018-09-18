@@ -19,7 +19,7 @@ float min_recocharge=0.0;
 float max_recocharge=1.5;
 float scale_recocharge=1.E-6;
 TString tit_recocharge="Tot reco charge";
-TString axis_recocharge="Reco harge [10^{6} ADC*ticks]";
+TString axis_recocharge="Reco charge [10^{6} ADC*ticks]";
 
 int nbins_N=81;
 float min_N=-0.5;

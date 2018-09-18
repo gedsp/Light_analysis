@@ -177,7 +177,7 @@ void make_plots(void)
 						 10., 0.2, 300., 120., 
 						 10, 10, 300, 300, 55, 55, 300,300,3.E5};
 	
-	for (int i=nhist; i<nhist; i++) 
+	for (int i=0; i<nhist; i++) 
 	{
 		c1->Clear();
 		c1->cd();
@@ -247,7 +247,7 @@ void make_plots(void)
 							700.1,5000.,20.,
 							0.15,0.18,80,20.0};
 							  
-	for (int i=n_names-4; i<n_names; i++)
+	for (int i=0; i<n_names; i++)
 	{
 		//if (i>=4) continue;
 		//if (i!=14) continue;
