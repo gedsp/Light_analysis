@@ -8,6 +8,8 @@
 static const int N_PMT = 5; // also in config_reco.h 
 static const int N_LEM = 12;
 
+#include "ana_michael/cuts.h"
+
 // full path to Light_analysis directory                        
 const string ana_dir = "/Volumes/data/Dropbox/physics/311/git/Light_analysis"; // local
 //const string ana_dir = "/afs/cern.ch/user/l/leyton/Light_analysis"; // on lxplus 
@@ -30,11 +32,5 @@ TString run_desc = "goodRunList v2";
 
 TString pmt_polar[N_PMT] = {"+","+","--","--","+"};
 int colors[N_PMT+1]={kBlue,kRed,kGreen-7,kViolet,kCyan,kBlack};
-
-// CUTS
-
-// calculated by fit_S1_tau.C
-float S1_tau_fit_mean[N_PMT] = {229.125, 229.124, 229.187, 229.186, 229.130};
-float S1_tau_fit_sigma[N_PMT] = {6.375e-03, 5.314e-03, 5.751e-03, 5.874e-03, 6.182e-03};
 
 #endif
