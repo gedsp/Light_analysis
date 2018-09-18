@@ -10,18 +10,18 @@
 
 using namespace std;
 
-TStyle* MyStyle();
+TStyle* MyStyle(bool b_2D=false);
 
-void SetMyStyle ()
+void SetMyStyle (bool b_2D=false)
 {
   std::cout << "\nApplying My style settings...\n" << std::endl ;
   //TStyle* MyStyle = 
-  MyStyle();
+  MyStyle(b_2D);
   gROOT->SetStyle("MyStyle");
   gROOT->ForceStyle();
 }
 
-TStyle* MyStyle() 
+TStyle* MyStyle(bool b_2D) 
 {
   TStyle *MyStyle = new TStyle("MyStyle","My style");
 
@@ -41,7 +41,8 @@ TStyle* MyStyle()
 
   // set margin sizes
   MyStyle->SetPadTopMargin(0.05);
-  MyStyle->SetPadRightMargin(0.05);
+  if (b_2D) MyStyle->SetPadRightMargin(0.16);
+  else MyStyle->SetPadRightMargin(0.05);
   MyStyle->SetPadBottomMargin(0.16);
   MyStyle->SetPadLeftMargin(0.16);
 
