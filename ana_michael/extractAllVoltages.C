@@ -56,7 +56,7 @@ www,xxx:pmt_voltage_4(V)
     ifstream in;
 	std::string tmp;
 	int run,subrun,nevents;
-	float grid,cath,dl,ext_field_l,ext_field_g,amp_field,drift_field;
+	float nsamples,grid,cath,dl,ext_field_l,ext_field_g,amp_field,drift_field;
 	float grid_err,cath_err,dl_err,ext_field_l_err,ext_field_g_err,amp_field_err,drift_field_err;
 	float lemu[12],lemd[12],pmt[5],trash[2];
 	float lemu_err[12],lemd_err[12],pmt_err[5];
@@ -64,6 +64,7 @@ www,xxx:pmt_voltage_4(V)
     TTree *ntuple = new TTree("ntuple","ntuple");
 	ntuple->Branch("run",&run,"run/I");
 	ntuple->Branch("subrun",&subrun,"subrun/I");
+	ntuple->Branch("nsamples",&nsamples,"nsamples/F");
 	ntuple->Branch("grid",&grid,"grid/F");
 	ntuple->Branch("grid_err",&grid_err,"grid_err/F");
 	ntuple->Branch("cath",&cath,"cath/F");
@@ -122,7 +123,11 @@ www,xxx:pmt_voltage_4(V)
 	  	if (fabs(drift_field_err/drift_field) > 0.005) printf("line %d: drift_field err/val = %0.2f%%\n",nlines,100.*drift_field_err/drift_field);
  	 }
 	 
-	  
+	 if (run>=768 && run<=838) nsamples=1000;
+	 else if (run>=839 && run<=1038) nsamples=262144;
+	 else if (run>=1165 && run<=1199) nsamples=1000;
+	 else { cout << "Nsamples unknown for run " << run << endl; nsamples=0; }
+
 	  ntuple->Fill();
 	  if (nlines<10) printf("line %d: %d %d %f %f %f %f %f, %f\n",nlines,run,subrun,grid,cath,lemu[0],lemd[0],pmt[0],pmt[1]);
   	  nlines++;
