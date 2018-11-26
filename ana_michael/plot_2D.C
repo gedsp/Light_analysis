@@ -3,20 +3,22 @@
 
 #include "../config_analysis.h"
 
-bool remake_histos=false;
+TString plotdir="plots/2D";
+
+bool remake_histos=true;
 
 const string fname_2D = "2D.root";
 
-int nbins_charge=90;
+int nbins_charge=70;
 float min_charge=0.0;
-float max_charge=9.0;
+float max_charge=7.0;
 float scale_charge=1.E-6;
 TString tit_charge="Tot charge";
 TString axis_charge="Charge [10^{6} ADC*ticks]";
 
-int nbins_recocharge=150;
+int nbins_recocharge=100;
 float min_recocharge=0.0;
-float max_recocharge=1.5;
+float max_recocharge=1.0;
 float scale_recocharge=1.E-6;
 TString tit_recocharge="Tot reco charge";
 TString axis_recocharge="Reco charge [10^{6} ADC*ticks]";
@@ -40,14 +42,14 @@ float min_S2light=0.0;
 float max_S2light=1.2;
 float scale_S2light=1.E6;
 TString tit_S2light="S2 PMT light";
-TString axis_S2light="S2 light [#muC]";
+TString axis_S2light="S2 corrected light [#muC]";
 
-int nbins_npe=70;
+int nbins_npe=60;
 float min_npe=0.0;
-float max_npe=7.0;
+float max_npe=6.0;
 float scale_npe=1.E-6;
 TString tit_npe="S2 n.p.e.";
-TString axis_npe="PMT S2 n.p.e. (x10^{6})";
+TString axis_npe="PMT S2 corrected n.p.e. (x10^{6})";
 
 
 void make_histos(TTree* dpd)
@@ -66,8 +68,8 @@ void make_histos(TTree* dpd)
   
     TH2F* h_S1S2_charge = new TH2F("h_S1S2_charge","S2 pmt_charge vs. S1 pmt_charge;S1 charge [nC];S2 charge [#muC]",100,0,5,80,0,0.4);
     TH2F* h_S1S2_npe = new TH2F("h_S1S2_npe","S2 n.p.e. vs. S1 n.p.e.;S1 n.p.e. (x10^{3});S2 n.p.e. (x10^{6})",100,0,20,100,0,2.0);
-    TH2F* h_S1S2_width = new TH2F("h_S1S2_width","S2_gaus width vs. S1 width;S1 width [ns];S2_gaus width [#mus]",120,0,120,175,0,350);
-    TH2F* h_S1S2_amp = new TH2F("h_S1S2_amp","S2 amp vs. S1 amp;S1 amp [V];S2 gaus amp [V]",100,0,2.01,90,0,0.09);
+    TH2F* h_S1S2_width = new TH2F("h_S1S2_width","S2 width vs. S1 width;S1 width [ns];S2 width [#mus]",120,0,120,175,0,350);
+    TH2F* h_S1S2_amp = new TH2F("h_S1S2_amp","S2 amp vs. S1 amp;S1 amp [V];S2 amp [V]",100,0,2.01,90,0,0.09);
   
     TH2F* h_charge_light_cut = (TH2F*)h_charge_light->Clone("h_charge_light_cut");
     TH2F* h_recocharge_light_cut = (TH2F*)h_recocharge_light->Clone("h_recocharge_light_cut");
@@ -85,10 +87,11 @@ void make_histos(TTree* dpd)
 	TString cut_sum = Form("Iteration$!=%d",N_PMT);
 	TString myCuts = cuts+" && "+cut_sum;
 	
-	dpd->Draw(Form("pmt_S2_charge*%f:pmt_S1_charge*1.E9>>h_S1S2_charge",scale_light),cut_sum,"colz");
-	dpd->Draw(Form("pmt_S2_npe*%f:pmt_S1_npe*1.E-3>>h_S1S2_npe",scale_npe),cut_sum,"colz");
-	dpd->Draw("pmt_S2_gaus_width:pmt_S1_width>>h_S1S2_width","","colz");
-	dpd->Draw("pmt_S2_gaus_amp:pmt_S1_amp>>h_S1S2_amp","","colz");
+	/*
+	dpd->Draw(Form("pmt_S2_charge*%f:pmt_S1_charge_4us*1.E9>>h_S1S2_charge",scale_light),cut_sum,"colz");
+	dpd->Draw(Form("pmt_S2_npe*%f:pmt_S1_npe_4us*1.E-3>>h_S1S2_npe",scale_npe),cut_sum,"colz");
+	dpd->Draw("pmt_S2_width:pmt_S1_width>>h_S1S2_width","","colz");
+	dpd->Draw("pmt_S2_amp:pmt_S1_amp>>h_S1S2_amp","","colz");
 	
 	dpd->Draw(Form("pmt_charge[5]*%f:tpc_totcharge*%f>>h_charge_light",scale_light,scale_charge),"","colz");
 	dpd->Draw(Form("pmt_charge[5]*%f:tpc_totrecocharge*%f>>h_recocharge_light",scale_light,scale_recocharge),"","colz");
@@ -99,19 +102,50 @@ void make_histos(TTree* dpd)
 	dpd->Draw(Form("pmt_S2_npe[5]*%f:tpc_totcharge*%f>>h_charge_S2npe",scale_npe,scale_charge),"","colz");
 	dpd->Draw(Form("pmt_S2_npe[5]*%f:tpc_totrecocharge*%f>>h_recocharge_S2npe",scale_npe,scale_recocharge),"","colz");
 	
-	dpd->Draw(Form("pmt_S2_charge*%f:pmt_S1_charge*1.E9>>h_S1S2_charge_cut",scale_light),myCuts,"colz");
-	dpd->Draw(Form("pmt_S2_npe*%f:pmt_S1_npe*1.E-3>>h_S1S2_npe_cut",scale_npe),myCuts,"colz");
-	dpd->Draw("pmt_S2_gaus_width:pmt_S1_width>>h_S1S2_width_cut",cuts,"colz");
-	dpd->Draw("pmt_S2_gaus_amp:pmt_S1_amp>>h_S1S2_amp_cut",cuts,"colz");
+	dpd->Draw(Form("pmt_S2_charge*%f:pmt_S1_charge_4us*1.E9>>h_S1S2_charge_cut",scale_light),myCuts,"colz");
+	dpd->Draw(Form("pmt_S2_npe*%f:pmt_S1_npe_4us*1.E-3>>h_S1S2_npe_cut",scale_npe),myCuts,"colz");
+	dpd->Draw("pmt_S2_width:pmt_S1_width>>h_S1S2_width_cut",cuts,"colz");
+	dpd->Draw("pmt_S2_amp:pmt_S1_amp>>h_S1S2_amp_cut",cuts,"colz");
 	
 	dpd->Draw(Form("pmt_charge[5]*%f:tpc_totcharge*%f>>h_charge_light_cut",scale_light,scale_charge),cuts,"colz");
 	dpd->Draw(Form("pmt_charge[5]*%f:tpc_totrecocharge*%f>>h_recocharge_light_cut",scale_light,scale_recocharge),cuts,"colz");
 	dpd->Draw(Form("pmt_charge[5]*%f:ntracks*%f>>h_tracks_light_cut",scale_light,scale_N),cuts,"colz");
 	dpd->Draw(Form("pmt_S2_charge[5]*%f:tpc_totcharge*%f>>h_charge_S2light_cut",scale_light,scale_charge),cuts,"colz");
+	cout << "cuts 2 = " << cuts << endl;
 	dpd->Draw(Form("pmt_S2_charge[5]*%f:tpc_totrecocharge*%f>>h_recocharge_S2light_cut",scale_light,scale_recocharge),cuts,"colz");
 	dpd->Draw(Form("pmt_S2_charge[5]*%f:ntracks*%f>>h_tracks_S2light_cut",scale_S2light,scale_N),cuts,"colz");
 	dpd->Draw(Form("pmt_S2_npe[5]*%f:tpc_totcharge*%f>>h_charge_S2npe_cut",scale_npe,scale_charge),cuts,"colz");
 	dpd->Draw(Form("pmt_S2_npe[5]*%f:tpc_totrecocharge*%f>>h_recocharge_S2npe_cut",scale_npe,scale_recocharge),cuts,"colz");
+	*/
+	
+	dpd->Draw(Form("pmt_S2_charge*%f:pmt_S1_charge_4us*1.E9>>h_S1S2_charge",scale_light),cut_sum,"colz");
+	dpd->Draw(Form("pmt_S2_npe*%f:pmt_S1_npe_4us*1.E-3>>h_S1S2_npe",scale_npe),cut_sum,"colz");
+	dpd->Draw("pmt_S2_width:pmt_S1_width>>h_S1S2_width","","colz");
+	dpd->Draw("pmt_S2_amp:pmt_S1_amp>>h_S1S2_amp","","colz");
+	
+	dpd->Draw(Form("(pmt_charge[0]+pmt_charge[1]+pmt_charge[4])*%f:tpc_totcharge*%f>>h_charge_light",scale_light,scale_charge),"","colz");
+	dpd->Draw(Form("(pmt_charge[0]+pmt_charge[1]+pmt_charge[4])*%f:tpc_totrecocharge*%f>>h_recocharge_light",scale_light,scale_recocharge),"","colz");
+	dpd->Draw(Form("(pmt_charge[0]+pmt_charge[1]+pmt_charge[4])*%f:ntracks*%f>>h_tracks_light",scale_light,scale_N),"","colz");
+	dpd->Draw(Form("pmt_S2_charge_corr[5]*%f:tpc_totcharge*%f>>h_charge_S2light",scale_light,scale_charge),"","colz");
+	dpd->Draw(Form("pmt_S2_charge[5]*%f:tpc_totrecocharge*%f>>h_recocharge_S2light",scale_light,scale_recocharge),"","colz");
+	dpd->Draw(Form("pmt_S2_charge[5]*%f:ntracks*%f>>h_tracks_S2light",scale_S2light,scale_N),"","colz");
+	dpd->Draw(Form("pmt_S2_npe_corr[5]*%f:tpc_totcharge*%f>>h_charge_S2npe",scale_npe,scale_charge),"","colz");
+	dpd->Draw(Form("pmt_S2_npe_corr[5]*%f:tpc_totrecocharge*%f>>h_recocharge_S2npe",scale_npe,scale_recocharge),"","colz");
+	
+	dpd->Draw(Form("pmt_S2_charge*%f:pmt_S1_charge_4us*1.E9>>h_S1S2_charge_cut",scale_light),myCuts,"colz");
+	dpd->Draw(Form("pmt_S2_npe*%f:pmt_S1_npe_4us*1.E-3>>h_S1S2_npe_cut",scale_npe),myCuts,"colz");
+	dpd->Draw("pmt_S2_width:pmt_S1_width>>h_S1S2_width_cut",cuts,"colz");
+	dpd->Draw("pmt_S2_amp:pmt_S1_amp>>h_S1S2_amp_cut",cuts,"colz");
+	
+	dpd->Draw(Form("pmt_S2_charge_corr[5]*%f:tpc_totcharge*%f>>h_charge_light_cut",scale_light,scale_charge),cuts,"colz");
+	dpd->Draw(Form("pmt_S2_charge_corr[5]*%f:tpc_totrecocharge*%f>>h_recocharge_light_cut",scale_light,scale_recocharge),cuts,"colz");
+	dpd->Draw(Form("pmt_S2_charge_corr[5]*%f:ntracks*%f>>h_tracks_light_cut",scale_light,scale_N),cuts,"colz");
+	dpd->Draw(Form("pmt_S2_charge_corr[5]*%f:tpc_totcharge*%f>>h_charge_S2light_cut",scale_light,scale_charge),cuts,"colz");
+	cout << "cuts 2 = " << cuts << endl;
+	dpd->Draw(Form("pmt_S2_charge_corr[5]*%f:tpc_totrecocharge*%f>>h_recocharge_S2light_cut",scale_light,scale_recocharge),cuts,"colz");
+	dpd->Draw(Form("pmt_S2_charge_corr[5]*%f:ntracks*%f>>h_tracks_S2light_cut",scale_S2light,scale_N),cuts,"colz");
+	dpd->Draw(Form("pmt_S2_npe_corr[5]*%f:tpc_totcharge*%f>>h_charge_S2npe_cut",scale_npe,scale_charge),cuts,"colz");
+	dpd->Draw(Form("pmt_S2_npe_corr[5]*%f:tpc_totrecocharge*%f>>h_recocharge_S2npe_cut",scale_npe,scale_recocharge),cuts,"colz");
 	
   	
 	TFile *f = new TFile(fname_2D.c_str(),"RECREATE");
@@ -146,7 +180,7 @@ void make_histos(TTree* dpd)
 
 void plot_2D()
 {
-	gSystem->Exec("mkdir -p plots");
+	gSystem->Exec(Form("mkdir -p %s",plotdir.Data()));
 	
 	build_cuts();
 	
@@ -161,6 +195,7 @@ void plot_2D()
 		
 		make_histos(dpd);
 	}
+	else cout << "WARNING: remake_histos set to FALSE" << endl << endl;
 	
 	TFile f_2d(fname_2D.c_str());
 	
@@ -190,7 +225,7 @@ void plot_2D()
 		  }
 		  c1->SetLogz();
 		  c1->RedrawAxis();
-		  c1->Print("plots/2D_"+name+".pdf");				  	
+		  c1->Print(plotdir+"/2D_"+name+".pdf");				  	
 	  }
   }
 }

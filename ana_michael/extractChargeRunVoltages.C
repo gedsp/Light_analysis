@@ -5,7 +5,7 @@
 
 static const int NMAX=5000;
 
-void extractAllVoltages(TString infile="/Volumes/data/Dropbox/physics/311/db/Charge_runs_database_2.txt", const string outfile="dbVoltages.root")
+void extractChargeRunVoltages(TString infile="/Volumes/data/Dropbox/physics/311/db/Charge_runs_database_2.txt", const string outfile="dbVoltages_charge.root")
 {
 
 	/*

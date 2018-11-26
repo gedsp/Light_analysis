@@ -1,0 +1,8 @@
+
+*.pdf
+ana_michael/plots/.DS_Store
+runList/.DS_Store
+.DS_Store
+*.png
+ana_michael/PedestalCorrection.root
+ana_michael/ped_corr.C
