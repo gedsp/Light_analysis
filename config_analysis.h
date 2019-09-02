@@ -11,24 +11,24 @@ static const int N_LEM = 12; // also in config_reco.h
 #include "ana_michael/cuts.h"
 
 // full path to Light_analysis directory                        
-const string ana_dir = "/Volumes/data/Dropbox/physics/311/git/Light_analysis"; // local
-//const string ana_dir = "/afs/cern.ch/user/l/leyton/git/Light_analysis"; // on lxplus 
+//const string ana_dir = "/Volumes/data/Dropbox/physics/311/git/Light_analysis"; // local
+const string ana_dir = "/afs/cern.ch/user/g/gldesaper/WA105_mine/Light_analysis"; // on lxplus
 
 // full path to DPD storage
-const string dpd_dir = "/Volumes/data/Dropbox/physics/311/git/Light_reco/dpdMaker/dpd"; // local
-//const string dpd_dir = "/afs/cern.ch/user/l/leyton/public/dpd_20181003";
+//const string dpd_dir = "/Volumes/data/Dropbox/physics/311/git/Light_reco/dpdMaker/dpd"; // local
+const string dpd_dir = "/eos/user/l/leyton/dpd_20190419";
 
 // full path to db files
-const string db_charge_file = "/Volumes/data/Dropbox/physics/311/git/Light_reco/dbVoltages_charge.root";
-const string db_light_file = "/Volumes/data/Dropbox/physics/311/git/Light_reco/dbVoltages_light.root";
+const string db_charge_file = "/afs/cern.ch/user/g/gldesape/WA105_mine/Light_reco/dbVoltages_charge.root";
+const string db_light_file = "/afs/cern.ch/user/g/gldesape/WA105_mine/Light_reco/dbVoltages_light.root";
 
 // full path to analysis input dpd file
-const string dpd_file = dpd_dir+"/dpd_goodRunList_v3_1107_20181106.root"; // local
-const string dpd_file2 = dpd_dir+"/dpd_goodRunList_v3_PMT1100_931_20181018.root"; // local
+const string dpd_file = dpd_dir+"/dpd_goodRunList_v4_1097_20190419.root"; // local
+//const string dpd_file2 = dpd_dir+"/dpd_goodRunList_v3_PMT1100_931_20181018.root"; // local
 //const string dpd_file = "/afs/cern.ch/user/l/leyton/public/dpd_goodRunList_v3_1107_20181003.root"; // on lxplus
 
 
-TString run_desc = "goodRunList v3";
+TString run_desc = "goodRunList v4";
 
 
 // PLOTTING
